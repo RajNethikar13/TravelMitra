@@ -3,7 +3,7 @@ name: Build Android APK
 on:
   workflow_dispatch:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   build:
@@ -18,6 +18,19 @@ jobs:
         with:
           flutter-version: "3.24.5"
           channel: stable
+
+      - name: Fix Flutter project structure
+        run: |
+          mkdir -p lib
+
+          if [ -f main.dart ] && [ ! -f lib/main.dart ]; then
+            mv main.dart lib/main.dart
+          fi
+
+          flutter create . \
+            --platforms=android \
+            --project-name=travel_mitra \
+            --org=com.travelmitra
 
       - name: Install dependencies
         run: flutter pub get
