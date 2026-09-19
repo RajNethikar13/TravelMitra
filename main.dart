@@ -22,6 +22,10 @@ class TravelMitraApp extends StatelessWidget {
   }
 }
 
+// -----------------------------------------------------------------------------
+// DATA MODEL
+// -----------------------------------------------------------------------------
+
 class TravelExperience {
   final String title;
   final String location;
@@ -44,13 +48,16 @@ class TravelExperience {
   });
 }
 
+// Temporary sample data.
+// Later this will come from Firebase.
 const experiences = [
   TravelExperience(
     title: 'Tirumala 6-Place Hilltop Jeep Tour',
     location: 'Tirupati, Andhra Pradesh',
     description:
-        'A local jeep circuit covering six hilltop attractions around Tirumala. '
-        'Ideal when you have 3–4 hours and want to cover multiple places efficiently.',
+        'A local jeep circuit covering six hilltop attractions around '
+        'Tirumala. Ideal when you have 3–4 hours and want to cover '
+        'multiple places efficiently.',
     duration: '3–4 hours',
     price: '₹300/person',
     category: 'Pilgrimage • Local',
@@ -65,6 +72,10 @@ const experiences = [
     ],
   ),
 ];
+
+// -----------------------------------------------------------------------------
+// HOME PAGE
+// -----------------------------------------------------------------------------
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -90,7 +101,9 @@ class _HomePageState extends State<HomePage> {
       bottomNavigationBar: NavigationBar(
         selectedIndex: selectedIndex,
         onDestinationSelected: (index) {
-          setState(() => selectedIndex = index);
+          setState(() {
+            selectedIndex = index;
+          });
         },
         destinations: const [
           NavigationDestination(
@@ -125,6 +138,7 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // HEADER
             Row(
               children: [
                 const Expanded(
@@ -139,17 +153,23 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       SizedBox(height: 4),
-                      Text('Plan smarter. Travel better.'),
+                      Text(
+                        'Plan smarter. Travel better.',
+                        style: TextStyle(fontSize: 14),
+                      ),
                     ],
                   ),
                 ),
-                CircleAvatar(
+                const CircleAvatar(
                   radius: 22,
                   child: Icon(Icons.person),
                 ),
               ],
             ),
+
             const SizedBox(height: 24),
+
+            // CREATE TRIP CARD
             Card(
               elevation: 0,
               child: Padding(
@@ -165,48 +185,71 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     const SizedBox(height: 14),
-                    FilledButton.icon(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const CreateTripPage(),
-                          ),
-                        );
-                      },
-                      icon: const Icon(Icons.add_road),
-                      label: const Text('Create a trip'),
+                    SizedBox(
+                      width: double.infinity,
+                      child: FilledButton.icon(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const CreateTripPage(),
+                            ),
+                          );
+                        },
+                        icon: const Icon(Icons.add_road),
+                        label: const Text('Create a trip'),
+                      ),
                     ),
                   ],
                 ),
               ),
             ),
+
             const SizedBox(height: 28),
+
+            // LOCAL EXPERIENCES
             const Text(
               'Local experiences worth adding',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
             ),
+
             const SizedBox(height: 12),
+
             ...experiences.map(
-              (experience) => ExperienceCard(experience: experience),
+              (experience) => ExperienceCard(
+                experience: experience,
+              ),
             ),
+
             const SizedBox(height: 18),
+
+            // COMING NEXT
             const Text(
               'Coming next',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
             ),
+
             const SizedBox(height: 10),
-            const _ComingNext(
+
+            const ComingNext(
               icon: Icons.map_outlined,
               title: 'Smart route optimization',
               text: 'Find useful stops with minimal detours.',
             ),
-            const _ComingNext(
+
+            const ComingNext(
               icon: Icons.directions_car_outlined,
               title: 'Intercity travel',
               text: 'Compare and plan cabs, buses, trains and more.',
             ),
-            const _ComingNext(
+
+            const ComingNext(
               icon: Icons.people_outline,
               title: 'Local contributors',
               text: 'Add verified local tours and experiences.',
@@ -218,10 +261,17 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
+// -----------------------------------------------------------------------------
+// EXPERIENCE CARD
+// -----------------------------------------------------------------------------
+
 class ExperienceCard extends StatelessWidget {
   final TravelExperience experience;
 
-  const ExperienceCard({super.key, required this.experience});
+  const ExperienceCard({
+    super.key,
+    required this.experience,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -234,7 +284,9 @@ class ExperienceCard extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => ExperienceDetailsPage(experience: experience),
+              builder: (_) => ExperienceDetailsPage(
+                experience: experience,
+              ),
             ),
           );
         },
@@ -252,7 +304,10 @@ class ExperienceCard extends StatelessWidget {
                       color: Colors.teal.withOpacity(0.12),
                       borderRadius: BorderRadius.circular(14),
                     ),
-                    child: const Icon(Icons.landscape_outlined, size: 30),
+                    child: const Icon(
+                      Icons.landscape_outlined,
+                      size: 30,
+                    ),
                   ),
                   const SizedBox(width: 14),
                   Expanded(
@@ -266,22 +321,36 @@ class ExperienceCard extends StatelessWidget {
                   ),
                 ],
               ),
+
               const SizedBox(height: 12),
+
               Text(experience.location),
+
               const SizedBox(height: 8),
+
               Wrap(
                 spacing: 8,
                 runSpacing: 6,
                 children: [
-                  Chip(label: Text(experience.duration)),
-                  Chip(label: Text(experience.price)),
-                  Chip(label: Text('⭐ ${experience.rating}')),
+                  Chip(
+                    label: Text(experience.duration),
+                  ),
+                  Chip(
+                    label: Text(experience.price),
+                  ),
+                  Chip(
+                    label: Text('⭐ ${experience.rating}'),
+                  ),
                 ],
               ),
+
               const SizedBox(height: 4),
+
               const Text(
                 'Tap to view details →',
-                style: TextStyle(fontWeight: FontWeight.w600),
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ],
           ),
@@ -291,30 +360,45 @@ class ExperienceCard extends StatelessWidget {
   }
 }
 
+// -----------------------------------------------------------------------------
+// EXPERIENCE DETAILS
+// -----------------------------------------------------------------------------
+
 class ExperienceDetailsPage extends StatelessWidget {
   final TravelExperience experience;
 
-  const ExperienceDetailsPage({super.key, required this.experience});
+  const ExperienceDetailsPage({
+    super.key,
+    required this.experience,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Experience')),
+      appBar: AppBar(
+        title: const Text('Experience'),
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // IMAGE PLACEHOLDER
             Container(
               height: 190,
               width: double.infinity,
               decoration: BoxDecoration(
-                color: color: Colors.teal.withOpacity(0.12),,
+                color: Colors.teal.withOpacity(0.12),
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: const Icon(Icons.landscape, size: 70),
+              child: const Icon(
+                Icons.landscape,
+                size: 70,
+              ),
             ),
+
             const SizedBox(height: 20),
+
             Text(
               experience.title,
               style: const TextStyle(
@@ -322,48 +406,81 @@ class ExperienceDetailsPage extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
+
             const SizedBox(height: 8),
+
             Text(experience.location),
+
             const SizedBox(height: 14),
+
             Wrap(
               spacing: 8,
+              runSpacing: 8,
               children: [
-                Chip(label: Text('⏱ ${experience.duration}')),
-                Chip(label: Text('₹ ${experience.price.replaceFirst('₹', '')}')),
-                Chip(label: Text('⭐ ${experience.rating}')),
+                Chip(
+                  label: Text('⏱ ${experience.duration}'),
+                ),
+                Chip(
+                  label: Text(experience.price),
+                ),
+                Chip(
+                  label: Text('⭐ ${experience.rating}'),
+                ),
               ],
             ),
-            const SizedBox(height: 18),
+
+            const SizedBox(height: 20),
+
             const Text(
               'About this experience',
-              style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 8),
-            Text(experience.description),
-            const SizedBox(height: 20),
-            const Text(
-              'Stops included',
-              style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 8),
-            ...experience.stops.asMap().entries.map(
-              (entry) => ListTile(
-                contentPadding: EdgeInsets.zero,
-                leading: CircleAvatar(
-                  radius: 14,
-                  child: Text('${entry.key + 1}'),
-                ),
-                title: Text(entry.value),
+              style: TextStyle(
+                fontSize: 19,
+                fontWeight: FontWeight.bold,
               ),
             ),
+
+            const SizedBox(height: 8),
+
+            Text(experience.description),
+
             const SizedBox(height: 20),
+
+            const Text(
+              'Stops included',
+              style: TextStyle(
+                fontSize: 19,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
+            const SizedBox(height: 8),
+
+            ...experience.stops.asMap().entries.map(
+              (entry) {
+                return ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: CircleAvatar(
+                    radius: 14,
+                    child: Text(
+                      '${entry.key + 1}',
+                    ),
+                  ),
+                  title: Text(entry.value),
+                );
+              },
+            ),
+
+            const SizedBox(height: 20),
+
             SizedBox(
               width: double.infinity,
               child: FilledButton.icon(
                 onPressed: () {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      content: Text('Experience added to your trip!'),
+                      content: Text(
+                        'Experience added to your trip!',
+                      ),
                     ),
                   );
                 },
@@ -378,6 +495,10 @@ class ExperienceDetailsPage extends StatelessWidget {
   }
 }
 
+// -----------------------------------------------------------------------------
+// CREATE TRIP
+// -----------------------------------------------------------------------------
+
 class CreateTripPage extends StatefulWidget {
   const CreateTripPage({super.key});
 
@@ -386,12 +507,18 @@ class CreateTripPage extends StatefulWidget {
 }
 
 class _CreateTripPageState extends State<CreateTripPage> {
-  final fromController = TextEditingController();
-  final toController = TextEditingController();
+  final TextEditingController fromController =
+      TextEditingController();
+
+  final TextEditingController toController =
+      TextEditingController();
+
   DateTime? startDate;
   DateTime? endDate;
-  final selectedInterests = <String>{};
-  final interests = [
+
+  final Set<String> selectedInterests = {};
+
+  final List<String> interests = [
     'Nature',
     'History',
     'Food',
@@ -410,13 +537,21 @@ class _CreateTripPageState extends State<CreateTripPage> {
   }
 
   Future<void> pickDate(bool isStart) async {
-    final date = await showDatePicker(
+    final DateTime? date = await showDatePicker(
       context: context,
       firstDate: DateTime.now(),
-      lastDate: DateTime.now().add(const Duration(days: 730)),
-      initialDate: DateTime.now().add(const Duration(days: 7)),
+      lastDate: DateTime.now().add(
+        const Duration(days: 730),
+      ),
+      initialDate: DateTime.now().add(
+        const Duration(days: 7),
+      ),
     );
-    if (date == null) return;
+
+    if (date == null) {
+      return;
+    }
+
     setState(() {
       if (isStart) {
         startDate = date;
@@ -429,7 +564,9 @@ class _CreateTripPageState extends State<CreateTripPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Create your trip')),
+      appBar: AppBar(
+        title: const Text('Create your trip'),
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
@@ -437,9 +574,15 @@ class _CreateTripPageState extends State<CreateTripPage> {
           children: [
             const Text(
               'Let us understand your journey',
-              style: TextStyle(fontSize: 23, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 23,
+                fontWeight: FontWeight.bold,
+              ),
             ),
+
             const SizedBox(height: 18),
+
+            // STARTING POINT
             TextField(
               controller: fromController,
               decoration: const InputDecoration(
@@ -448,7 +591,10 @@ class _CreateTripPageState extends State<CreateTripPage> {
                 border: OutlineInputBorder(),
               ),
             ),
+
             const SizedBox(height: 14),
+
+            // DESTINATION
             TextField(
               controller: toController,
               decoration: const InputDecoration(
@@ -457,7 +603,10 @@ class _CreateTripPageState extends State<CreateTripPage> {
                 border: OutlineInputBorder(),
               ),
             ),
+
             const SizedBox(height: 18),
+
+            // DATES
             Row(
               children: [
                 Expanded(
@@ -471,7 +620,9 @@ class _CreateTripPageState extends State<CreateTripPage> {
                     ),
                   ),
                 ),
+
                 const SizedBox(width: 10),
+
                 Expanded(
                   child: OutlinedButton.icon(
                     onPressed: () => pickDate(false),
@@ -485,52 +636,75 @@ class _CreateTripPageState extends State<CreateTripPage> {
                 ),
               ],
             ),
+
             const SizedBox(height: 24),
+
             const Text(
               'What are you interested in?',
-              style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 19,
+                fontWeight: FontWeight.bold,
+              ),
             ),
+
             const SizedBox(height: 10),
+
             Wrap(
               spacing: 8,
-              children: interests.map((interest) {
-                final selected = selectedInterests.contains(interest);
-                return FilterChip(
-                  label: Text(interest),
-                  selected: selected,
-                  onSelected: (value) {
-                    setState(() {
-                      if (value) {
-                        selectedInterests.add(interest);
-                      } else {
-                        selectedInterests.remove(interest);
-                      }
-                    });
-                  },
-                );
-              }).toList(),
+              runSpacing: 8,
+              children: interests.map(
+                (interest) {
+                  final bool selected =
+                      selectedInterests.contains(interest);
+
+                  return FilterChip(
+                    label: Text(interest),
+                    selected: selected,
+                    onSelected: (value) {
+                      setState(() {
+                        if (value) {
+                          selectedInterests.add(interest);
+                        } else {
+                          selectedInterests.remove(interest);
+                        }
+                      });
+                    },
+                  );
+                },
+              ).toList(),
             ),
+
             const SizedBox(height: 30),
+
             SizedBox(
               width: double.infinity,
               child: FilledButton(
                 onPressed: () {
                   if (toController.text.trim().isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Enter a destination.')),
+                      const SnackBar(
+                        content: Text(
+                          'Enter a destination.',
+                        ),
+                      ),
                     );
                     return;
                   }
+
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => SuggestedExperiencesPage(
-                        destination: toController.text.trim(),
+                      builder: (_) =>
+                          SuggestedExperiencesPage(
+                        destination:
+                            toController.text.trim(),
                       ),
                     ),
                   );
                 },
-                child: const Text('Find experiences'),
+                child: const Text(
+                  'Find experiences',
+                ),
               ),
             ),
           ],
@@ -540,36 +714,61 @@ class _CreateTripPageState extends State<CreateTripPage> {
   }
 }
 
+// -----------------------------------------------------------------------------
+// SUGGESTED EXPERIENCES
+// -----------------------------------------------------------------------------
+
 class SuggestedExperiencesPage extends StatelessWidget {
   final String destination;
 
-  const SuggestedExperiencesPage({super.key, required this.destination});
+  const SuggestedExperiencesPage({
+    super.key,
+    required this.destination,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Suggested for your trip')),
+      appBar: AppBar(
+        title: const Text(
+          'Suggested for your trip',
+        ),
+      ),
       body: ListView(
         padding: const EdgeInsets.all(20),
         children: [
           Text(
             'Experiences near $destination',
-            style: const TextStyle(fontSize: 23, fontWeight: FontWeight.bold),
+            style: const TextStyle(
+              fontSize: 23,
+              fontWeight: FontWeight.bold,
+            ),
           ),
+
           const SizedBox(height: 8),
+
           const Text(
-            'Later this screen will use your route, dates, interests, '
-            'travel mode and budget to rank nearby experiences.',
+            'Later this screen will use your route, dates, '
+            'interests, travel mode and budget to rank '
+            'nearby experiences.',
           ),
+
           const SizedBox(height: 18),
+
           ...experiences.map(
-            (e) => ExperienceCard(experience: e),
+            (experience) => ExperienceCard(
+              experience: experience,
+            ),
           ),
         ],
       ),
     );
   }
 }
+
+// -----------------------------------------------------------------------------
+// MY TRIPS
+// -----------------------------------------------------------------------------
 
 class TripsPage extends StatelessWidget {
   const TripsPage({super.key});
@@ -583,15 +782,22 @@ class TripsPage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.route, size: 70),
+              Icon(
+                Icons.route,
+                size: 70,
+              ),
               SizedBox(height: 15),
               Text(
                 'Your trips will appear here',
-                style: TextStyle(fontSize: 21, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 21,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               SizedBox(height: 8),
               Text(
-                'Create a trip and start adding local experiences.',
+                'Create a trip and start adding '
+                'local experiences.',
                 textAlign: TextAlign.center,
               ),
             ],
@@ -601,6 +807,10 @@ class TripsPage extends StatelessWidget {
     );
   }
 }
+
+// -----------------------------------------------------------------------------
+// EXPLORE
+// -----------------------------------------------------------------------------
 
 class ExplorePage extends StatelessWidget {
   const ExplorePage({super.key});
@@ -613,25 +823,41 @@ class ExplorePage extends StatelessWidget {
         children: [
           const Text(
             'Explore',
-            style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: 28,
+              fontWeight: FontWeight.bold,
+            ),
           ),
+
           const SizedBox(height: 16),
+
           TextField(
             decoration: InputDecoration(
-              hintText: 'Search places, experiences or routes',
+              hintText:
+                  'Search places, experiences or routes',
               prefixIcon: const Icon(Icons.search),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
               ),
             ),
           ),
+
           const SizedBox(height: 20),
-          ...experiences.map((e) => ExperienceCard(experience: e)),
+
+          ...experiences.map(
+            (experience) => ExperienceCard(
+              experience: experience,
+            ),
+          ),
         ],
       ),
     );
   }
 }
+
+// -----------------------------------------------------------------------------
+// PROFILE
+// -----------------------------------------------------------------------------
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -641,21 +867,29 @@ class ProfilePage extends StatelessWidget {
     return const SafeArea(
       child: Center(
         child: Text(
-          'Profile\n\nContributor features will come here.',
+          'Profile\n\n'
+          'Contributor features will come here.',
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 20),
+          style: TextStyle(
+            fontSize: 20,
+          ),
         ),
       ),
     );
   }
 }
 
-class _ComingNext extends StatelessWidget {
+// -----------------------------------------------------------------------------
+// COMING NEXT CARD
+// -----------------------------------------------------------------------------
+
+class ComingNext extends StatelessWidget {
   final IconData icon;
   final String title;
   final String text;
 
-  const _ComingNext({
+  const ComingNext({
+    super.key,
     required this.icon,
     required this.title,
     required this.text,
@@ -668,7 +902,12 @@ class _ComingNext extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 8),
       child: ListTile(
         leading: Icon(icon),
-        title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
+        title: Text(
+          title,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         subtitle: Text(text),
       ),
     );
