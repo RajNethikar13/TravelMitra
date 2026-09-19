@@ -309,7 +309,7 @@ class ExperienceDetailsPage extends StatelessWidget {
               height: 190,
               width: double.infinity,
               decoration: BoxDecoration(
-                color: Colors.teal.withValues(alpha: .12),
+                color: color: Colors.teal.withOpacity(0.12),,
                 borderRadius: BorderRadius.circular(20),
               ),
               child: const Icon(Icons.landscape, size: 70),
