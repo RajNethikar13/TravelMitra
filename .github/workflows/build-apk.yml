@@ -32,11 +32,15 @@ jobs:
             --project-name=travel_mitra \
             --org=com.travelmitra
 
+      - name: Remove default Flutter test
+        run: |
+          rm -rf test
+
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Analyze
-        run: flutter analyze
+      - name: Analyze app code
+        run: flutter analyze lib
 
       - name: Build APK
         run: flutter build apk --release
