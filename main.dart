@@ -249,7 +249,7 @@ class ExperienceCard extends StatelessWidget {
                     height: 58,
                     width: 58,
                     decoration: BoxDecoration(
-                      color: Colors.teal.withValues(alpha: .12),
+                      color: Colors.teal.withOpacity(0.12),
                       borderRadius: BorderRadius.circular(14),
                     ),
                     child: const Icon(Icons.landscape_outlined, size: 30),
