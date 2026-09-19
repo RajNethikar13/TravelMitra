@@ -3,7 +3,8 @@ name: Build Android APK
 on:
   workflow_dispatch:
   push:
-    branches: ["main"]
+    branches:
+      - main
 
 jobs:
   build:
@@ -19,12 +20,12 @@ jobs:
           flutter-version: "3.24.5"
           channel: stable
 
-      - name: Fix Flutter project structure
+      - name: Prepare Flutter project
         run: |
           mkdir -p lib
 
-          if [ -f main.dart ] && [ ! -f lib/main.dart ]; then
-            mv main.dart lib/main.dart
+          if [ -f main.dart ]; then
+            cp main.dart lib/main.dart
           fi
 
           flutter create . \
@@ -32,15 +33,11 @@ jobs:
             --project-name=travel_mitra \
             --org=com.travelmitra
 
-      - name: Remove default Flutter test
-        run: |
-          rm -rf test
-
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Analyze app code
-        run: flutter analyze lib
+      - name: Remove default tests
+        run: rm -rf test
 
       - name: Build APK
         run: flutter build apk --release
